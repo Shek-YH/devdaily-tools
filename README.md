@@ -48,6 +48,13 @@ devdaily log app.log --level ERROR --last 100
 - Python 3.8+
 - wkhtmltopdf (optional, for md2pdf)
 
+## Roadmap
+
+- [ ] Add YAML/JSON config file support for `organize`
+- [ ] Watch mode for `log` (tail -f style)
+- [ ] `.env` template generation wizard
+- [ ] Plugin system for custom commands
+
 ## Contributing
 
 PRs and issues welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
