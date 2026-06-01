@@ -34,7 +34,7 @@ def md2pdf(input_file, output, style):
 
 
 @main.command()
-@click.argument("action", type=click.Choice(["check", "diff", "sync"]))
+@click.argument("action", type=click.Choice(["check", "diff", "sync", "example"]))
 @click.option("--required", default="", help="Comma-separated list of required env vars.")
 @click.option("--file", "-f", default=".env", help="Path to .env file.")
 @click.option("--other", default=None, help="Second .env file for diff/sync.")

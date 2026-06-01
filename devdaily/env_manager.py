@@ -27,6 +27,22 @@ def parse_env_file(filepath: str) -> dict:
     return result
 
 
+def generate_example(source: str):
+    """Generate a .env.example file with placeholder values from an existing .env."""
+    src_env = parse_env_file(source)
+    if not src_env:
+        console.print(f"[red]No variables found in {source}[/]")
+        return
+
+    target = Path(source).parent / ".env.example"
+    lines = ["# Environment variables — copy to .env and fill in real values\n"]
+    for k in sorted(src_env):
+        lines.append(f'{k}="your_{k.lower()}_here"')
+
+    target.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    console.print(f"[green]✓[/] Generated {target} with {len(src_env)} variables.")
+
+
 def manage_env(action: str, required: str, file: str, other: str = None):
     """Dispatch env management actions."""
     if action == "check":
@@ -35,6 +51,8 @@ def manage_env(action: str, required: str, file: str, other: str = None):
         diff_env(file, other)
     elif action == "sync":
         sync_env(file, other)
+    elif action == "example":
+        generate_example(file)
 
 
 def check_env(required: str, file: str):
