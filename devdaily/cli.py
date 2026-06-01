@@ -48,9 +48,10 @@ def env(action, required, file, other):
 @click.option("--level", "-l", default=None, help="Filter by log level (ERROR, WARN, INFO, DEBUG).")
 @click.option("--last", "-n", default=None, type=int, help="Show only last N lines.")
 @click.option("--pattern", "-p", default=None, help="Search for a regex pattern.")
-def log(logfile, level, last, pattern):
+@click.option("--json-out", "-j", default=None, help="Export analysis report to a JSON file.")
+def log(logfile, level, last, pattern, json_out):
     """Analyze and summarize a log file."""
-    analyze_log(logfile, level, last, pattern)
+    analyze_log(logfile, level, last, pattern, json_out)
 
 
 if __name__ == "__main__":

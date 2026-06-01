@@ -1,5 +1,6 @@
 """Log analyzer - Parse, filter, and summarize log files."""
 
+import json
 import re
 from collections import Counter
 from pathlib import Path
@@ -22,7 +23,15 @@ LEVEL_WEIGHT = {
 }
 
 
-def analyze_log(logfile: str, level: str = None, last: int = None, pattern: str = None):
+def export_json(result: dict, output_path: str):
+    """Export analysis result to a JSON file."""
+    out = Path(output_path).resolve()
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
+    console.print(f"[green]Report exported to[/] {out}")
+
+
+def analyze_log(logfile: str, level: str = None, last: int = None, pattern: str = None, json_out: str = None):
     """Parse and summarize a log file."""
     path = Path(logfile).resolve()
     if not path.exists():
@@ -92,6 +101,17 @@ def analyze_log(logfile: str, level: str = None, last: int = None, pattern: str 
         console.print(Panel("[yellow bold]Moderate issues detected[/]", title="Assessment"))
     else:
         console.print(Panel("[green]Looks clean[/]", title="Assessment"))
+
+    # Export JSON report if requested
+    if json_out:
+        export_json({
+            "file": str(path),
+            "total_lines": total_lines,
+            "matching_lines": len(lines),
+            "level_counts": dict(level_counts),
+            "heat_score": heat,
+            "sample_errors": error_lines[:5],
+        }, json_out)
 
 
 if __name__ == "__main__":
