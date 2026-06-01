@@ -86,6 +86,13 @@ def organize_files(directory: str, sort_by: str = "type", dry_run: bool = False)
 
     for src, dest in moves:
         dest.parent.mkdir(parents=True, exist_ok=True)
+        # Handle name conflicts by appending a counter
+        if dest.exists():
+            stem = dest.stem
+            counter = 1
+            while dest.exists():
+                dest = dest.parent / f"{stem}_{counter}{dest.suffix}"
+                counter += 1
         shutil.move(str(src), str(dest))
 
     console.print(f"\n[green]✓[/] Organized {len(moves)} files.")
